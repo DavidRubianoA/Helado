@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Video Clip Toy Story- David Rubiano- Omar Beltran</title>
+    <style>
+      html, body { margin: 0; padding: 0; overflow: hidden; }
+    </style>
+  </head>
+  <body>
+    <script src="js/three.js"></script>
+	<script src="js/controls/OrbitControls.js"></script>
+	<script src="js/csg.js"></script>
+	<script src="js/THREE.CSG.js"></script>
+    <script>
+		var scene, aspect, camera, renderer, controls;
+		init();
+		animate();
+		function init(){
+			//INICIALIZACIÓN
+	        scene = new THREE.Scene();
+	        aspect = window.innerWidth / window.innerHeight;
+	        camera = new THREE.PerspectiveCamera( 75, aspect, 0.1, 1000);
+	        renderer = new THREE.WebGLRenderer();
+	        renderer.setSize( window.innerWidth, window.innerHeight );
+	        document.body.appendChild( renderer.domElement );
+			controls = new THREE.OrbitControls( camera, renderer.domElement );
+			
+			//ELEMENTOS COMUNES
+			var size = 10;
+			var arrowSize = 1;
+			var divisions = size;
+			var origin = new THREE.Vector3( 0, 0, 0 );
+			var x = new THREE.Vector3( 1, 0, 0 );
+			var y = new THREE.Vector3( 0, 1, 0 );
+		  	var z = new THREE.Vector3( 0, 0, 1 );
+		  	var color = new THREE.Color( 0x333333 );
+		  	var colorR = new THREE.Color( 0x4B2C00 );
+		  	var colorG = new THREE.Color(0x4B2C00 );
+		  	var colorB = new THREE.Color( 0x333366 );
+			
+		  	//CREAR LAS GRILLAS PARA EL ESCENARIO
+		  	var axesHelper = new THREE.AxesHelper( size );
+			scene.add( axesHelper );
+			
+		  	var gridHelperXZ = new THREE.GridHelper( size, divisions, color, color );
+			scene.add( gridHelperXZ );
+            
+            //ROTARLAS PARA QUE QUEDEN EN EL ESPACIO ADECUADO
+            gridHelperXZ.rotateOnWorldAxis ( y, THREE.Math.degToRad(90) );
+
+            //CREAR ILUMINACIÓN
+            var ambient = new THREE.AmbientLight( 0xffffff, 2 );
+            scene.add( ambient );
+			
+            var pointLight = new THREE.PointLight( 0xffffff, 1, 100 );
+            pointLight.position.set( -5, -2, 5 );
+            scene.add( pointLight );
+			
+            var pointLight = new THREE.PointLight( 0xffffff, .5, 100 );
+            pointLight.position.set( 5, -2, -5 );
+            scene.add( pointLight );
+			
+			//CREAR LAS GEOMETRÍAS
+			var boxGeometry = new THREE.BoxGeometry( 2, 2, 2.5 );
+			var boxGeometry1 = new THREE.BoxGeometry( 4, 0.5, 4 );
+			var sphereGeometry = new THREE.SphereGeometry( .2, 32, 32 );
+			var torusGeometry = new THREE.TorusGeometry( 0.2, .07, 2,45);
+			
+						
+			//CREAR LOS MATERIALES
+            var material1 = new THREE.MeshStandardMaterial( { color: colorR, metalness: 0.5, roughness: 0.1 } );
+			var material2 = new THREE.MeshStandardMaterial( { color: colorG, metalness: 0.5, roughness: 0.1, transparent:true, opacity: 0.5  } );
+			var material3 = new THREE.MeshStandardMaterial( { color: 0x96989A  } );
+			
+			//CREAR LAS MALLAS
+			var cube = new THREE.Mesh( boxGeometry );
+			var cube2 = new THREE.Mesh( boxGeometry1 );
+			cube2.translateX( 0.8 );
+			cube2.translateZ( 5 );
+			var torus = new THREE.Mesh( torusGeometry );
+			torus.translateX( -1 );
+			torus.translateZ( 5.8);
+			torus.translateY( 0.27 );
+			torus.rotateX( Math.PI/2 );
+			var torus1 = new THREE.Mesh( torusGeometry );
+			torus1.translateX( -0.5 );
+			torus1.translateZ( 6);
+			torus1.translateY( 0.27 );
+			torus1.rotateX( Math.PI/2 );
+			var torus2 = new THREE.Mesh( torusGeometry );
+			torus2.translateX( -1 );
+			torus2.translateZ( 6);
+			torus2.translateY( 0.27 );
+			torus2.rotateX( Math.PI/2 );
+			var torus3 = new THREE.Mesh(torusGeometry );
+			torus3.translateX( -0.5 );
+			torus3.translateZ( 6.5);
+			torus3.translateY( 0.27 );
+			torus3.rotateX( Math.PI/2 );
+			var torus4 = new THREE.Mesh(torusGeometry );
+			torus4.translateX( -0.5 );
+			torus4.translateZ( 5.5);
+			torus4.translateY( 0.27 );
+			torus4.rotateX( Math.PI/2 );
+			var torus5 = new THREE.Mesh( torusGeometry );
+			torus5.translateX( -0.2 );
+			torus5.translateZ( 6);
+			torus5.translateY( 0.27 );
+			torus5.rotateX( Math.PI/2 );
+			var torus6 = new THREE.Mesh( torusGeometry);
+			torus6.translateX( -0.2 );
+			torus6.translateZ( 6.5);
+			torus6.translateY( 0.27 );
+			torus6.rotateX( Math.PI/2 );
+			var torus7 = new THREE.Mesh( torusGeometry);
+			torus7.translateX( -0.2 );
+			torus7.translateZ( 5.5);
+			torus7.translateY( 0.27 );
+			torus7.rotateX( Math.PI/2 );
+			
+			var sphere = new THREE.Mesh( sphereGeometry );
+			sphere.translateX( 1 );
+			sphere.translateZ( -0.25 );
+			var sphere1 = new THREE.Mesh( sphereGeometry );
+			sphere1.translateX( 1 );
+			sphere1.translateZ( -0.7 );
+			var sphere2 = new THREE.Mesh( sphereGeometry );
+			sphere2.translateX( 1 );
+			sphere2.translateZ( 0.25 );
+			var sphere3 = new THREE.Mesh( sphereGeometry );
+			sphere3.translateX( 1 );
+			sphere3.translateZ( 0.7 );
+			
+			//CONVERTIR A CSG
+			var boxCSG = THREE.CSG.fromMesh( cube );
+			var sphereCSG = THREE.CSG.fromMesh( sphere );
+			
+			//APLICAR LAS OPERACIONES
+			var result1 = boxCSG.subtract( sphereCSG );	//CAJA MENOS ESFERA
+			var result2= boxCSG.intersect( sphereCSG );	//INTERSECCIÓN - CAJA Y ESFERA
+			var result3 = boxCSG.union( sphereCSG );	//UNIÓN - CAJA Y ESFERA
+			var result4 = sphereCSG.subtract( boxCSG );	//ESFERA MENOS CAJA
+			
+			//CONVERTIR A MALLA DE THREE JS NUEVAMENTE
+			var C2T1 = THREE.CSG.toMesh( result1 );
+			var C2T2 = THREE.CSG.toMesh( result2 );
+			var C2T3 = THREE.CSG.toMesh( result3 );
+			var C2T4 = THREE.CSG.toMesh( result4 );
+			
+			C2T1.material = material1; 
+			C2T2.material = material1; 
+			C2T3.material = material1; 
+			C2T4.material = material1; 
+			
+			cube.material = material1;
+			cube2.material = material1;
+			sphere.material = material2;
+			sphere1.material = material2;
+			sphere2.material = material2;
+			sphere3.material = material2;
+			torus.material = material3;
+			torus1.material = material3;
+			torus2.material = material3;
+			torus3.material = material3;
+			torus4.material = material3;
+			torus5.material = material3;
+			torus6.material = material3;
+			torus7.material = material3;
+			 C2T1.translateX(2);
+			 var curve1 = new THREE.CubicBezierCurve3(
+               new THREE.Vector3(  1,0.1,0.75),
+                new THREE.Vector3(1, .05,0.75 ),
+                new THREE.Vector3( 1, -0.05,0.75 ),
+			   new THREE.Vector3(  1, -0.07,0.75)
+            );
+            
+            var curve2 = new THREE.CubicBezierCurve3(
+                 new THREE.Vector3(  1.1,0.1,0.75),
+                new THREE.Vector3( 1.1, .05,0.75),
+                new THREE.Vector3( 1.1,-0.05,0.75 ),
+			   new THREE.Vector3(  1.1, -0.07,0.75)
+            );
+            
+            var pointGeometry = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point = curve1.getPoint( i/20 );
+                pointGeometry.vertices.push( point );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point = curve2.getPoint( i/20 );
+                pointGeometry.vertices.push( point );
+            }
+
+            var pointMaterial = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints = new THREE.Points( pointGeometry, pointMaterial );
+            
+            var material = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            material.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry.faces.push( face2 );
+            }
+            pointGeometry.computeFaceNormals();
+            //pointGeometry.computeVertexNormals();
+
+			 var curve3 = new THREE.CubicBezierCurve3(
+               new THREE.Vector3(  1,0.1,0.3),
+                new THREE.Vector3(1, .05,0.3 ),
+                new THREE.Vector3( 1, -0.05,0.3 ),
+			   new THREE.Vector3(  1, -0.07,0.3)
+            );
+            
+            var curve4 = new THREE.CubicBezierCurve3(
+                 new THREE.Vector3(  1.1,0.1,0.3),
+                new THREE.Vector3( 1.1, .05,0.3),
+                new THREE.Vector3( 1.1,-0.05,0.3 ),
+			   new THREE.Vector3(  1.1, -0.07,0.3)
+            );
+            
+            var pointGeometry1 = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point1 = curve3.getPoint( i/20 );
+                pointGeometry1.vertices.push( point1 );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point1 = curve4.getPoint( i/20 );
+                pointGeometry1.vertices.push( point1 );
+            }
+
+            var pointMaterial1 = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints1 = new THREE.Points( pointGeometry1, pointMaterial1 );
+            
+            var materialc1 = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            materialc1.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry1.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry1.faces.push( face2 );
+            }
+            pointGeometry1.computeFaceNormals();
+            //pointGeometry.computeVertexNormals();
+			 var curve5 = new THREE.CubicBezierCurve3(
+               new THREE.Vector3(  1,0.1,-0.2),
+                new THREE.Vector3(1, .05,-0.2),
+                new THREE.Vector3( 1, -0.05,-0.2 ),
+			   new THREE.Vector3(  1, -0.07,-0.2)
+            );
+            
+            var curve6 = new THREE.CubicBezierCurve3(
+                 new THREE.Vector3(  1.1,0.1,-0.2),
+                new THREE.Vector3( 1.1, .05,-0.2),
+                new THREE.Vector3( 1.1,-0.05,-0.2 ),
+			   new THREE.Vector3(  1.1, -0.07,-0.2)
+            );
+            
+            var pointGeometry2 = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point2 = curve5.getPoint( i/20 );
+                pointGeometry2.vertices.push( point2 );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point2 = curve6.getPoint( i/20 );
+                pointGeometry2.vertices.push( point2 );
+            }
+
+            var pointMaterial2 = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints2 = new THREE.Points( pointGeometry2, pointMaterial2 );
+            
+            var materialc2 = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            materialc2.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry2.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry2.faces.push( face2 );
+            }
+            pointGeometry2.computeFaceNormals();
+			var curve7 = new THREE.CubicBezierCurve3(
+               new THREE.Vector3(  1,0.1,-0.6),
+                new THREE.Vector3(1, .05,-0.6),
+                new THREE.Vector3( 1, -0.05,-0.6 ),
+			   new THREE.Vector3(  1, -0.07,-0.6)
+            );
+            
+            var curve8 = new THREE.CubicBezierCurve3(
+                 new THREE.Vector3(  1.1,0.1,-0.6),
+                new THREE.Vector3( 1.1, .05,-0.6),
+                new THREE.Vector3( 1.1,-0.05,-0.6 ),
+			   new THREE.Vector3(  1.1, -0.07,-0.6)
+            );
+            
+            var pointGeometry3 = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point3 = curve7.getPoint( i/20 );
+                pointGeometry3.vertices.push( point3 );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point3 = curve8.getPoint( i/20 );
+                pointGeometry3.vertices.push( point3 );
+            }
+
+            var pointMaterial3 = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints3 = new THREE.Points( pointGeometry3, pointMaterial3 );
+            
+            var materialc3 = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            materialc3.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry3.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry3.faces.push( face2 );
+            }
+            pointGeometry3.computeFaceNormals();
+			
+	//cinco		
+			
+			
+			var curve9 = new THREE.CubicBezierCurve3(
+               new THREE.Vector3(  1,0.05,0.65),
+                new THREE.Vector3(1, .03,0.5),
+                new THREE.Vector3( 1, -0.05,0.5 ),
+			   new THREE.Vector3(  1, -0.07,0.65)
+            );
+            
+            var curve10 = new THREE.CubicBezierCurve3(
+                 new THREE.Vector3(  1.1,0.03,0.65),
+                new THREE.Vector3( 1.1, .03,0.5),
+                new THREE.Vector3( 1.1,-0.05,0.5 ),
+			   new THREE.Vector3(  1.1, -0.07,0.65)
+            );
+            
+            var pointGeometry4 = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point4 = curve9.getPoint( i/20 );
+                pointGeometry4.vertices.push( point4 );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point4 = curve10.getPoint( i/20 );
+                pointGeometry4.vertices.push( point4 );
+            }
+
+            var pointMaterial4 = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints4 = new THREE.Points( pointGeometry3, pointMaterial3 );
+            
+            var materialc4 = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            materialc4.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry4.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry4.faces.push( face2 );
+            }
+            pointGeometry4.computeFaceNormals();
+			
+			
+			var curve11 = new THREE.CubicBezierCurve3(
+               new THREE.Vector3(  1,0.1,0.65),
+                new THREE.Vector3(1, .08,0.65),
+                new THREE.Vector3( 1, 0.05,0.65 ),
+			   new THREE.Vector3(  1, 0.03,0.65)
+            );
+            
+            var curve12 = new THREE.CubicBezierCurve3(
+                 new THREE.Vector3(  1.1,0.1,0.65),
+                new THREE.Vector3( 1.1, .08,0.65),
+                new THREE.Vector3( 1.1,0.05,0.65 ),
+			   new THREE.Vector3(  1.1, 0.03,0.65)
+            );
+            
+            var pointGeometry5 = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point5 = curve11.getPoint( i/20 );
+                pointGeometry5.vertices.push( point5 );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point5 = curve12.getPoint( i/20 );
+                pointGeometry5.vertices.push( point5 );
+            }
+
+            var pointMaterial5 = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints5 = new THREE.Points( pointGeometry5, pointMaterial5 );
+            
+            var materialc5 = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            materialc5.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry5.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry5.faces.push( face2 );
+            }
+            pointGeometry5.computeFaceNormals();
+			
+			
+			var curve13 = new THREE.CubicBezierCurve3(
+               new THREE.Vector3(  1,0.1,0.65),
+                new THREE.Vector3(1, .1,0.65),
+                new THREE.Vector3( 1, 0.1,0.65 ),
+			   new THREE.Vector3(  1, 0.1,0.55)
+            );
+            
+            var curve14 = new THREE.CubicBezierCurve3(
+                 new THREE.Vector3(  1.1,0.1,0.65),
+                new THREE.Vector3( 1.1, .1,0.6),
+                new THREE.Vector3( 1.1,0.1,0.65 ),
+			   new THREE.Vector3(  1.1, 0.1,0.55)
+            );
+            
+            var pointGeometry6 = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point6 = curve13.getPoint( i/20 );
+                pointGeometry6.vertices.push( point6 );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point6 = curve14.getPoint( i/20 );
+                pointGeometry6.vertices.push( point6 );
+            }
+
+            var pointMaterial6 = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints6 = new THREE.Points( pointGeometry5, pointMaterial5 );
+            
+            var materialc6 = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            materialc6.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry6.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry6.faces.push( face2 );
+            }
+            pointGeometry6.computeFaceNormals();
+			
+			
+         
+			
+			//seis
+			var curve19 = new THREE.CubicBezierCurve3(
+               new THREE.Vector3(  1,0.05,0.2),
+                new THREE.Vector3(1, .03,0.1),
+                new THREE.Vector3( 1, -0.05,0.1 ),
+			   new THREE.Vector3(  1, -0.07,0.2)
+            );
+            
+            var curve20 = new THREE.CubicBezierCurve3(
+                 new THREE.Vector3(  1.1,0.03,0.2),
+                new THREE.Vector3( 1.1, .03,0.1),
+                new THREE.Vector3( 1.1,-0.05,0.1 ),
+			   new THREE.Vector3(  1.1, -0.07,0.2)
+            );
+            
+            var pointGeometry9 = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point9 = curve19.getPoint( i/20 );
+                pointGeometry9.vertices.push( point9 );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point9 = curve20.getPoint( i/20 );
+                pointGeometry9.vertices.push( point9 );
+            }
+
+            var pointMaterial9 = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints9 = new THREE.Points( pointGeometry9, pointMaterial9 );
+            
+            var materialc9 = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            materialc9.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry9.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry9.faces.push( face2 );
+            }
+            pointGeometry9.computeFaceNormals();
+			
+				var curve21 = new THREE.CubicBezierCurve3(
+               new THREE.Vector3(  1,0.05,0.2),
+                new THREE.Vector3(1, .03,0.3),
+                new THREE.Vector3( 1, -0.05,0.3 ),
+			   new THREE.Vector3(  1, -0.07,0.15)
+            );
+            
+            var curve22 = new THREE.CubicBezierCurve3(
+                 new THREE.Vector3(  1.1,0.03,0.2),
+                new THREE.Vector3( 1.1, .03,0.3),
+                new THREE.Vector3( 1.1,-0.05,0.3 ),
+			   new THREE.Vector3(  1.1, -0.07,0.15)
+            );
+            
+            var pointGeometry10 = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point10 = curve21.getPoint( i/20 );
+                pointGeometry10.vertices.push( point10 );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point10 = curve22.getPoint( i/20 );
+                pointGeometry10.vertices.push( point10 );
+            }
+
+            var pointMaterial10 = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints10 = new THREE.Points( pointGeometry10, pointMaterial10 );
+            
+            var materialc10 = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            materialc10.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry10.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry10.faces.push( face2 );
+            }
+            pointGeometry10.computeFaceNormals();
+			
+			
+			
+				var curve23 = new THREE.CubicBezierCurve3(
+               new THREE.Vector3(  1,0.1,0.2),
+                new THREE.Vector3(1, .05,0.3),
+                new THREE.Vector3( 1, -0.05,0.3 ),
+			   new THREE.Vector3(  1, -0.07,0.15)
+            );
+            
+            var curve24 = new THREE.CubicBezierCurve3(
+                 new THREE.Vector3(  1.1,0.1,0.2),
+                new THREE.Vector3( 1.1, .05,0.3),
+                new THREE.Vector3( 1.1,-0.05,0.3 ),
+			   new THREE.Vector3(  1.1, -0.07,0.15)
+            );
+            
+            var pointGeometry11 = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point11 = curve23.getPoint( i/20 );
+                pointGeometry11.vertices.push( point11 );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point11 = curve24.getPoint( i/20 );
+                pointGeometry11.vertices.push( point11 );
+            }
+
+            var pointMaterial11 = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints11 = new THREE.Points( pointGeometry11, pointMaterial11 );
+            
+            var materialc11 = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            materialc11.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry11.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry11.faces.push( face2 );
+            }
+            pointGeometry11.computeFaceNormals();
+			
+			
+			//siete
+			
+			 var curve15 = new THREE.CubicBezierCurve3(
+               new THREE.Vector3(  1,0.1,-0.35),
+                new THREE.Vector3(1, .05,-0.35),
+                new THREE.Vector3( 1, -0.05,-0.35 ),
+			   new THREE.Vector3(  1, -0.07,-0.35)
+            );
+            
+            var curve16 = new THREE.CubicBezierCurve3(
+                 new THREE.Vector3(  1.1,0.1,-0.35),
+                new THREE.Vector3( 1.1, .05,-0.35),
+                new THREE.Vector3( 1.1,-0.05,-0.35 ),
+			   new THREE.Vector3(  1.1, -0.07,-0.35)
+            );
+            
+            var pointGeometry7 = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point7 = curve15.getPoint( i/20 );
+                pointGeometry7.vertices.push( point7 );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point7 = curve16.getPoint( i/20 );
+                pointGeometry7.vertices.push( point7 );
+            }
+
+            var pointMaterial7 = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints7 = new THREE.Points( pointGeometry7, pointMaterial7 );
+            
+            var materialc7 = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            materialc7.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry7.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry7.faces.push( face2 );
+            }
+            pointGeometry7.computeFaceNormals();
+			
+			var curve17 = new THREE.CubicBezierCurve3(
+               new THREE.Vector3(  1,0.1,-0.35),
+                new THREE.Vector3(1, .1,-0.33),
+                new THREE.Vector3( 1, 0.1,-0.3 ),
+			   new THREE.Vector3(  1, 0.1,-0.25)
+            );
+            
+            var curve18 = new THREE.CubicBezierCurve3(
+                 new THREE.Vector3(  1.1,0.1,-0.35),
+                new THREE.Vector3( 1.1, .1,-0.33),
+                new THREE.Vector3( 1.1,0.1,-0.3 ),
+			   new THREE.Vector3(  1.1, 0.1,-0.25)
+            );
+            
+            var pointGeometry8 = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point8 = curve17.getPoint( i/20 );
+                pointGeometry8.vertices.push( point8 );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point8 = curve18.getPoint( i/20 );
+                pointGeometry8.vertices.push( point8 );
+            }
+
+            var pointMaterial8 = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints8 = new THREE.Points( pointGeometry8, pointMaterial8 );
+            
+            var materialc8 = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            materialc6.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry8.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry8.faces.push( face2 );
+            }
+            pointGeometry8.computeFaceNormals();
+			
+			//8cho
+				var curve25 = new THREE.CubicBezierCurve3(
+               new THREE.Vector3(  1,0.03,-0.8),
+                new THREE.Vector3(1, .03,-0.9),
+                new THREE.Vector3( 1, -0.05,-0.9 ),
+			   new THREE.Vector3(  1, -0.07,-0.75)
+            );
+            
+            var curve26 = new THREE.CubicBezierCurve3(
+                 new THREE.Vector3(  1.1,0.03,-0.8),
+                new THREE.Vector3( 1.1, .03,-0.9),
+                new THREE.Vector3( 1.1,-0.05,-0.9 ),
+			   new THREE.Vector3(  1.1, -0.07,-0.75)
+            );
+            
+            var pointGeometry12 = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point12 = curve25.getPoint( i/20 );
+                pointGeometry12.vertices.push( point12 );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point12 = curve26.getPoint( i/20 );
+                pointGeometry12.vertices.push( point12 );
+            }
+
+            var pointMaterial12 = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints12 = new THREE.Points( pointGeometry12, pointMaterial12 );
+            
+            var materialc12 = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            materialc12.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry12.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry12.faces.push( face2 );
+            }
+            pointGeometry12.computeFaceNormals();
+			
+				var curve27 = new THREE.CubicBezierCurve3(
+				 new THREE.Vector3(  1,0.03,-0.8),
+                new THREE.Vector3(1, .03,-0.7),
+                new THREE.Vector3( 1, -0.05,-0.7 ),
+			   new THREE.Vector3(  1, -0.07,-0.8)
+              
+            );
+            
+            var curve28 = new THREE.CubicBezierCurve3(
+              new THREE.Vector3(  1.1,0.03,-0.8),
+                new THREE.Vector3( 1.1, .03,-0.7),
+                new THREE.Vector3( 1.1,-0.05,-0.7 ),
+			   new THREE.Vector3(  1.1, -0.07,-0.8)
+            );
+            
+            var pointGeometry13 = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point13 = curve27.getPoint( i/20 );
+                pointGeometry13.vertices.push( point13 );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point13 = curve28.getPoint( i/20 );
+                pointGeometry13.vertices.push( point13 );
+            }
+
+            var pointMaterial13 = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints13 = new THREE.Points( pointGeometry13, pointMaterial13 );
+            
+            var materialc13 = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            materialc13.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry13.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry13.faces.push( face2 );
+            }
+            pointGeometry13.computeFaceNormals();
+			
+			
+			
+			var curve29 = new THREE.CubicBezierCurve3(
+               new THREE.Vector3(  1,0.1,-0.8),
+                new THREE.Vector3(1, .07,-0.9),
+                new THREE.Vector3( 1, 0.05,-0.9 ),
+			   new THREE.Vector3(  1, 0.03,-0.75)
+            );
+            
+            var curve30 = new THREE.CubicBezierCurve3(
+                 new THREE.Vector3(  1.1,0.1,-0.8),
+                new THREE.Vector3( 1.1, .07,-0.9),
+                new THREE.Vector3( 1.1,0.05,-0.9 ),
+			   new THREE.Vector3(  1.1, 0.03,-0.75)
+            );
+            
+            var pointGeometry14 = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point14 = curve29.getPoint( i/20 );
+                pointGeometry14.vertices.push( point14 );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point14 = curve30.getPoint( i/20 );
+                pointGeometry14.vertices.push( point14 );
+            }
+
+            var pointMaterial14 = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints14 = new THREE.Points( pointGeometry14, pointMaterial14 );
+            
+            var materialc14 = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            materialc14.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry14.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry14.faces.push( face2 );
+            }
+            pointGeometry14.computeFaceNormals();
+			
+				var curve31 = new THREE.CubicBezierCurve3(
+				 new THREE.Vector3(  1,0.1,-0.8),
+                new THREE.Vector3(1, .07,-0.7),
+                new THREE.Vector3( 1, 0.05,-0.7 ),
+			   new THREE.Vector3(  1, 0.01,-0.8)
+              
+            );
+            
+            var curve32 = new THREE.CubicBezierCurve3(
+              new THREE.Vector3(  1.1,0.1,-0.8),
+                new THREE.Vector3( 1.1, .07,-0.7),
+                new THREE.Vector3( 1.1,0.05,-0.7 ),
+			   new THREE.Vector3(  1.1, 0.01,-0.8)
+            );
+            
+            var pointGeometry15 = new THREE.Geometry();
+            for(var i=0; i<20; i++){
+                var point15 = curve31.getPoint( i/20 );
+                pointGeometry15.vertices.push( point15 );
+            }
+            
+            for(var i=0; i<20; i++){
+                var point15 = curve32.getPoint( i/20 );
+                pointGeometry15.vertices.push( point15 );
+            }
+
+            var pointMaterial15 = new THREE.PointsMaterial( { color: 0x000000 } );
+            var curvePoints15 = new THREE.Points( pointGeometry15, pointMaterial15 );
+            
+            var materialc15 = new THREE.MeshStandardMaterial( { color : 0x000000 } );
+            materialc15.side = THREE.DoubleSide;
+            for(var i=0; i<19; i++){
+                var face1 = new THREE.Face3( i, i+1, i+20 );
+                pointGeometry15.faces.push( face1 );
+                var face2 = new THREE.Face3( i+1, i+20, i+21 );
+                pointGeometry15.faces.push( face2 );
+            }
+            pointGeometry15.computeFaceNormals();
+
+
+            scene.add( new THREE.Mesh( pointGeometry, material ) );
+			 scene.add( new THREE.Mesh( pointGeometry1, materialc1 ) );
+			 scene.add( new THREE.Mesh( pointGeometry2, materialc2 ) );
+			 scene.add( new THREE.Mesh( pointGeometry3, materialc3 ) );
+			scene.add( new THREE.Mesh( pointGeometry4, materialc4 ) );
+			scene.add( new THREE.Mesh( pointGeometry5, materialc5 ) );
+				scene.add( new THREE.Mesh( pointGeometry6, materialc6 ) );
+			scene.add( new THREE.Mesh( pointGeometry7, materialc7) );
+			scene.add( new THREE.Mesh( pointGeometry8, materialc8) );
+			scene.add( new THREE.Mesh( pointGeometry9, materialc9) );
+			 scene.add( new THREE.Mesh( pointGeometry10, materialc10 ) );
+			scene.add( new THREE.Mesh( pointGeometry11, materialc11 ) );
+			 scene.add( new THREE.Mesh( pointGeometry12, materialc12 ) );
+			 scene.add( new THREE.Mesh( pointGeometry13, materialc13 ) );
+			scene.add( new THREE.Mesh( pointGeometry14, materialc14 ) );
+			scene.add( new THREE.Mesh( pointGeometry15, materialc15 ) );
+			//C2T2.translateX(-2);
+			//C2T2.translateX(-2);
+			//C2T3.translateZ(2);
+			//C2T4.translateZ(-2);
+			
+			//AGREGAR A LA ESCENA LOS DIFERENTES ELEMENTOS
+			scene.add( cube );	
+			scene.add( cube2 );	//ACTIVAR PARA VISUALIZAR EL CUBO
+			//scene.add( C2T1 );
+			scene.add( C2T2 );
+		//scene.add(curvePoints13);
+			//scene.add( C2T3 );
+	//scene.add( C2T4 );
+			scene.add( sphere );
+			scene.add( sphere1 );
+			scene.add( sphere2 );
+			scene.add( sphere3 );
+			scene.add( torus );	
+			scene.add( torus1 );
+			scene.add( torus2 );
+			scene.add( torus3 );
+			scene.add( torus4 );
+			scene.add( torus5 );
+			scene.add( torus6 );
+			scene.add( torus7 );
+			//ACTIVAR PARA VISUALIZAR LA ESFERA
+
+			camera.position.x = 1;
+			camera.position.y = 2;
+		  	camera.position.z = 5;
+			camera.lookAt( origin );
+		}
+		function animate(){
+			requestAnimationFrame( animate );
+			//controls.update();
+			render();
+		}
+		function render(){
+			renderer.render( scene, camera );
+		}
+    </script>
+  </body>
+</html>
